@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import javax.annotation.PreDestroy
 import javax.jms.Connection
-import javax.jms.ConnectionFactory
+import javax.jms.Queue
 import javax.jms.Session
 
 @Configuration
@@ -22,8 +22,13 @@ open class Configuration {
         broker.addConnector("tcp://localhost:61616")
         broker.start()
 
-        val connectionFactory: ConnectionFactory = ActiveMQConnectionFactory("tcp://localhost:61616")
+        val connectionFactory: ActiveMQConnectionFactory = ActiveMQConnectionFactory("tcp://localhost:61616")
+        connectionFactory.trustedPackages = arrayListOf(
+                "com.github.grzegorzwitkowski.weirdtodo.server.api",
+                "org.joda.time"
+        )
         connection = connectionFactory.createConnection()
+        connection.start()
     }
 
     @Bean
@@ -34,6 +39,11 @@ open class Configuration {
     @Bean
     open fun objectMapper(): ObjectMapper {
         return ObjectMapper().registerModules(KotlinModule(), JodaModule())
+    }
+
+    @Bean(name = arrayOf("newTodosQueue"))
+    open fun newTodosQueue(jmsSession: Session): Queue {
+        return jmsSession.createQueue("new-todos")
     }
 
     @PreDestroy
