@@ -1,2 +1,3 @@
 rootProject.name = 'weird-todo'
+include 'weird-todo-server'
 

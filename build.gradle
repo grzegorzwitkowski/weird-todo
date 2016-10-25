@@ -1,5 +1,8 @@
 buildscript {
     ext.ver_kotlin = "1.0.4"
+    ext.ver_activemq = "5.14.1"
+    ext.ver_springboot = "1.4.1.RELEASE"
+
     repositories {
         mavenCentral()
     }
@@ -11,12 +14,14 @@ buildscript {
 group "com.github.grzegorzwitkowski"
 version "1.0-SNAPSHOT"
 
-apply plugin: "kotlin"
+subprojects {
+    apply plugin: "kotlin"
 
-repositories {
-    mavenCentral()
-}
+    repositories {
+        mavenCentral()
+    }
 
-dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$ver_kotlin"
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$ver_kotlin"
+    }
 }
